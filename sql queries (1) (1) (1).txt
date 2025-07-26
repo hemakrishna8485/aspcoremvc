@@ -1,0 +1,297 @@
+
+To Find 2nd Heighest Salary Using A Sub-Query
+==============================================
+SELECT TOP 1 SALARY  
+FROM (  
+      SELECT DISTINCT TOP 2  SALARY  
+      FROM tbl_Employees  
+      ORDER BY SALARY DESC  
+      ) RESULT  
+ORDER BY SALARY 
+------------------------------------------------
+To Find 2nd Heighest Salary Using A Sub-Query
+===============================================
+SELECT TOP 1 SALARY  
+FROM (  
+      SELECT DISTINCT TOP 2 SALARY  
+      FROM tbl_Employees  
+      ORDER BY SALARY DESC  
+      ) RESULT  
+ORDER BY SALARY  
+----------------------------
+To Find 2nd Heighest Salary Using CTE:
+==========================================
+WITH RESULT AS  
+(  
+    SELECT SALARY,  
+           DENSE_RANK() OVER (ORDER BY SALARY DESC) AS DENSERANK  
+    FROM tbl_Employees  
+)  
+SELECT TOP 1 SALARY  
+FROM RESULT  
+WHERE DENSERANK = 2 
+------------------------------------------------------------
+
+select max(salary) as salary  from  employee 
+select min(salary) as salary  from  employee 
+select distinct  top 3 salary from employee order by salary desc
+
+-------------------------------------------------------------------------------------------------------
+
+To Find The Nth Highest Salary Using CTE
+========================================
+with result as
+(
+ select salary ,
+               dense_rank() over (order by salary desc) as denserank
+from employee 
+)
+select top 1 salary 
+from result 
+
+where denseraank =1
+
+
+-----------------------------
+inner join
+select employee.ename,details.adderess from employee inner join details on employee.sid =details.sid
+---------------------------------
+select address from details
+union 
+select ename from employee 
+
+---------------------------------------
+delete the duplicate records in table
+
+DELETE
+FROM details1
+WHERE id IN (
+    SELECT id
+    FROM details1
+    GROUP BY id
+    HAVING (COUNT(id) > 1)
+
+-----------------
+display the odd numbers in table
+  select empno, sal, deptno, mod(empno,1)odd from emp;
+
+display the even numbers in table
+  select empno, sal, deptno, mod(empno,2)even from emp;
+
+-----------------------------------------
+select dname,noofemp,avsal from dept d ,
+(select count(*)as noofemp , avg(Sal)avsal , deptno from emp group by deptno)e
+where e.deptno=d.deptno
+-------------------------
+transicition stored procedures:-
+
+BEGIN TRANSACTION Developers
+GO
+
+DECLARE @name varchar(50)
+DECLARE @company varchar(100)
+
+SET @name = 'user1'
+SET @company = 'user2'
+ 
+GO
+COMMIT TRANSACTION Developers
+
+-------------------
+
+-----------------------
+
+create table employeedetails(id int primarykey,salary(varchar(50))
+
+
+create table studentdetails(id int identity(1,1),name(varchar(50))
+
+
+create table details(id int primarykey identity(1,1))
+
+
+
+
+
+cerate procedure sp_insert_details_employee(@name nvarchar(50),@salary nvarchar(50),@address navrchar(100))
+As
+Begin
+insert into employee (name,salary,address)
+values (@name, @salary,@address)
+end
+-----------------------------------------------------------------------------------------------------------------------------
+
+
+stored procedure:-
+---------------------
+
+use [clients] (or) create database clients
+
+                 [     any name    ]
+create procedure sp_insert_employee @Id int,
+   @FirstName NVARCHAR(100), @LastName NVARCHAR(100), @Email NVARCHAR(100), @PHone NVaRCHAr(13)
+  
+AS
+BEGIN
+  INSERT INTO Employee(FirstName,LastName,Email,Phone)
+   VALUES
+  (@FirstName,@LastName,@Email,@PHone)
+
+END
+
+
+
+exec sp_insert_employee 1, 'kiran','goud','bgiug','234567'
+select * from Employee
+
+              
+create table Employee(Id int, FirstName nvarchar(50),LastName nvarchar(50),Email nvarchar(50),Phone nvarchar(50))
+---------------------------------------------------------------------------------------------------------------------------
+
+
+create database MyDetails
+
+create procedure  DMartDetails @id int,@company nvarchar(50),@rating nvarchar(50), @cost nvarchar(50)
+AS
+BEGIN
+
+insert into Details(id,company,rating,cost)
+values
+(@id,@company,@rating,@cost)
+
+END
+
+create table Details(id int primary key,company nvarchar(50),rating nvarchar(50),cost nvarchar(50))
+
+exec DMartDetails 1, 'santoor',5,35
+select * from Details
+
+------------------------------------------------
+
+1)Use EXTRACT on the HIREDATE and check if it is less than 15:
+
+ans:-SELECT * FROM EMP WHERE EXTRACT(day FROM HIREDATE) < 15
+
+
+SELECT * FROM EMP 
+WHERE EXTRACT(DAY FROM DATECOL) < 15 
+AND EXTRACT(YEAR FROM DATECOL) BETWEEN 1980 AND 1990;
+
+
+select * from EMP where  to_char(hiredate,'DD') < 15 and to_char(hiredate,'YYYY') between 1980 and 1990
+
+
+
+codefapproch:-
+----------------
+
+"ConnectionStrings": {
+    "DefaultConnection": "Data Source=OJAS-DL406;User Id=sa;Password=Ojas@15251525;Initial Catalog=MyDetails"
+  }
+
+
+Dbfapproch:
+-----------
+Scaffold-DbContext "Server=OJAS-DL406;Database=Requirement;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -o Models
+
+
+
+Create database OBS
+
+ 
+
+Create table Role(
+RoleId int primary key identity(1,1),
+RoleName nvarchar(50)
+)
+Insert into Role values('Admin')
+Insert into Role values('User')
+
+ 
+
+Create table Registration(
+UserId int identity(1,1),
+EmailId nvarchar(50),
+Password nvarchar(50),
+PhoneNumber nvarchar(50),
+RoleId int foreign key references Role(RoleId))
+
+ 
+
+select * from Role
+select * from Registration
+
+ 
+
+Insert into Registration values('veera@gmail.com', 'Ojas@1234', '9010448961',1)
+
+
+
+Q) Write a Query to rename the tablename?
+A) syntax: sp_renameoldtablename, newtablename
+Ex: sp_rename Employee,Emp
+
+add the new column in the table
+
+ALTER TABLE table_name
+ADD column_name data_type;
+
+
+ALTER TABLE employees
+ADD details varchar(30);
+
+1: Rename a Column
+ALTER TABLE Student RENAME Column name TO FIRST_NAME;
+2: Rename a TableALTER TABLE Student_Details
+MODIFY COLUMN phone BIGINT;
+ALTER TABLE Student RENAME TO Student_Details;
+3:Modify a Column Data Type
+
+
+self join
+
+Query:select e.ename as'Employee',m.ename as'Manager'from emp 
+e join emp m on e.mid=m.eno
+
+SELECT CategoryName, ProductName
+FROM Categories INNER JOIN Products
+ON Categories.CategoryID = Products.CategoryID;
+--------------------------------------------------------------------
+
+
+			
+			
+
+A transaction in SQL is a sequence of one or more SQL statements executed as a single unit of work. These statements could be performing operations like INSERT, UPDATE, or DELETE. 
+
+
+
+
+
+
+sap abap 
+rap,cap
+integration suit
+
+
+
+
+
+
+
+
+
+
+ 
+guru99
+uplatz
+tutorial point
+Srinivas m sap
+
+
+
+
+
+
+
+
